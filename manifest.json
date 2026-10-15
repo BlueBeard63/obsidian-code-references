@@ -1,7 +1,7 @@
 {
   "id": "code-references",
   "name": "Code References",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.5.0",
   "description": "Link prose to specific lines of a code block with [label](#id:11-14). Hover to highlight, click to jump, plus code block titles and source links.",
   "author": "Jack Morrison",

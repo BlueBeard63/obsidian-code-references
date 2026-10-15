@@ -1,6 +1,6 @@
 {
   "name": "obsidian-code-references",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Obsidian plugin: link prose to lines of a code block, with hover highlight and click-to-jump.",
   "type": "module",
