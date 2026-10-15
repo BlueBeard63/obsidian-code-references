@@ -79,8 +79,15 @@ pre.coderef-pre > code {
   transition: box-shadow var(--coderef-fade) ease-out;
 }
 
-.coderef-line:empty::after {
+/* Blank lines keep their height (they hold at most the hidden newline). */
+.coderef-line:empty::after,
+.coderef-line:has(> .coderef-nl:only-child)::after {
   content: " ";
+}
+
+/* The real newline between lines: kept in the text for copying and re-highlighting, not drawn. */
+.coderef-nl {
+  display: none;
 }
 
 .coderef-line::before {

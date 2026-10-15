@@ -15,6 +15,7 @@ import {
 } from "./parse";
 
 const LINE_CLASS = "coderef-line";
+const NEWLINE_CLASS = "coderef-nl";
 const flashTimers = new WeakMap<HTMLElement, number>();
 
 export function registerReadingView(plugin: CodeRefsPlugin): void {
@@ -149,6 +150,9 @@ function wrapLines(code: HTMLElement, expected: number): void {
     const line = code.createSpan({ cls: LINE_CLASS });
     line.dataset.line = String(i + 1);
     for (const n of nodes) line.appendChild(n);
+    // Keep the newline in the text (hidden, the line is already a block). Without it the code's
+    // textContent is one long line, so a re-highlight or the copy button collapses the block.
+    if (i < lines.length - 1) line.createSpan({ cls: NEWLINE_CLASS, text: "\n" });
   });
 }
 

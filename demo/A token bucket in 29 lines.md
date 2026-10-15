@@ -1,5 +1,4 @@
-%% Screenshot note for the README and the community listing. Open demo/ as a vault after `npm run demo`.
-The source= link is illustrative: it shows the "view source" header, there is no such repo. %%
+%% Screenshot note for the README and the community listing. Open demo/ as a vault after `npm run demo`. The source= link is illustrative: it shows the "view source" header, there is no such repo. %%
 
 A rate limiter only has to answer one question: may this request go ahead *now*? A token bucket answers it with three numbers and a timestamp.
 
@@ -41,3 +40,7 @@ func (b *Bucket) Allow() bool {
 
 > [!tip] Try it
 > Hover any double-underlined phrase to light up its lines, click to jump to them, or Ctrl/Cmd-click to open them on GitHub.
+
+
+
+test
