@@ -1,7 +1,6 @@
 # Code References
 
-An Obsidian plugin for writing about code. Give a code block an id, then link any sentence to specific
-lines of it:
+An Obsidian plugin for writing about code. Give a code block an id, then link any sentence to specific lines of it:
 
 ````md
 ```go title="crypto/seal.go" id="seal"
@@ -14,30 +13,22 @@ func Seal(key, plaintext []byte) ([]byte, error) {
 The important part is [a fresh random nonce](#seal:11-14), and [this line](#seal:3) does X.
 ````
 
-In reading view and Live Preview the link gets a double underline and a small `L11-14` label.
-**Hover** it and those lines light up in the block; **click** it and the note scrolls to them and flashes
-them. Readers of a long write-up never lose their place between the prose and the code.
+In reading view and Live Preview the link gets a double underline and a small `L11-14` label. **Hover** it and those lines light up in the block; **click** it and the note scrolls to them and flashes them. Readers of a long write-up never lose their place between the prose and the code.
 
-It is plain Markdown underneath: without the plugin (on GitHub, in other editors, in a static site
-generator) a reference is just a link to `#seal`, so nothing breaks.
+It is plain Markdown underneath: without the plugin (on GitHub, in other editors, in a static site generator) a reference is just a link to `#seal`, so nothing breaks.
 
 ## Features
 
 - **Line references:** `[label](#id:line)` or `[label](#id:from-to)` to any id'd code block in the same note.
 - **Hover highlight** of the referenced lines; **click** to scroll and flash them (reading view and Live Preview).
-- **Code block headers** for blocks with an id: the `title` (or language), line numbers, and a `view source ↗`
-  link when the block has `source="owner/repo@ref:path"` (GitHub). Ctrl/Cmd-click a reference to open GitHub at
-  exactly those lines.
+- **Code block headers** for blocks with an id: the `title` (or language), line numbers, and a `view source ↗` link when the block has `source="owner/repo@ref:path"` (GitHub). Ctrl/Cmd-click a reference to open GitHub at exactly those lines.
 - **Broken reference warnings:** an unknown id or out-of-range lines show a dotted underline with a tooltip.
 - **Commands** (command palette, listed under "Code References:", no default hotkeys):
-  - *Copy reference for selected lines*: select lines inside a code block, run it, paste. If the block
-    has no id yet, it asks for one (with a suggestion) and adds it to the fence.
-  - *Paste reference*: inserts the reference you last copied, without going through the clipboard.
-    Selected text becomes the link label.
+  - *Copy reference for selected lines*: select lines inside a code block, run it, paste. If the block has no id yet, it asks for one (with a suggestion) and adds it to the fence.
+  - *Paste reference*: inserts the reference you last copied, without going through the clipboard. Selected text becomes the link label.
   - *Insert reference...*: pick a block from the note, then a line range.
   - *Validate references in current note*: lists every broken reference and duplicate id, click to jump.
-- **Settings:** highlight duration, Live Preview decorations on/off, line numbers in reading view, copy to the
-  system clipboard on/off.
+- **Settings:** highlight duration, Live Preview decorations on/off, line numbers in reading view, copy to the system clipboard on/off.
 - Follows your theme (light and dark); no colours of its own beyond a soft highlight.
 
 ## Syntax
@@ -49,38 +40,26 @@ generator) a reference is just a link to `#seal`, so nothing breaks.
 
 - Attributes come after the language, in any order, as `key="value"`. All are optional; refs need `id`.
 - `id`: letters, numbers, `-` and `_`; unique within the note. Lines count from 1.
-- `source`: `BlueBeard63/Bosun@v0.7.0:registry.go` links to that file on GitHub at that ref. Use a tag or commit
-  so line numbers never drift. Add `private: true` to a note's frontmatter to hide source links in that note.
+- `source`: `BlueBeard63/Bosun@v0.7.0:registry.go` links to that file on GitHub at that ref. Use a tag or commit so line numbers never drift. Add `private: true` to a note's frontmatter to hide source links in that note.
 - References: `[text](#id:7)` for one line, `[text](#id:11-14)` for a range.
 
 ## Install
 
-**From Obsidian:** Settings, Community plugins, Browse, search for "Code References". *(Pending review; until then
-use BRAT or a manual install.)*
+**From Obsidian:** Settings, Community plugins, Browse, search for "Code References". *(Pending review; until then use BRAT or a manual install.)*
 
-**With BRAT:** install the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin, choose *Add beta plugin*
-and enter `BlueBeard63/obsidian-code-references`.
+**With BRAT:** install the [BRAT](https://github.com/TfTHacker/obsidian42-brat) plugin, choose *Add beta plugin* and enter `BlueBeard63/obsidian-code-references`.
 
-**Manually:** download `main.js`, `manifest.json` and `styles.css` from the
-[latest release](https://github.com/BlueBeard63/obsidian-code-references/releases/latest) into
-`<your vault>/.obsidian/plugins/code-references/`, then enable *Code References* under Community plugins.
+**Manually:** download `main.js`, `manifest.json` and `styles.css` from the [latest release](https://github.com/BlueBeard63/obsidian-code-references/releases/latest) into `<your vault>/.obsidian/plugins/code-references/`, then enable *Code References* under Community plugins.
 
 ## Permissions and privacy
 
-- **Clipboard: write only, and only when you ask.** The single clipboard call is a `writeText` in the *Copy code
-  reference for selected lines* command, which puts a string like `[](#seal:11-14)` on the clipboard. The plugin
-  never reads the clipboard and never handles paste events, so nothing you copied elsewhere is seen. To keep the
-  plugin away from the system clipboard entirely, turn off **Copy to system clipboard** in its settings; the copy
-  command then keeps the reference inside the plugin and *Paste reference* inserts it.
+- **Clipboard: write only, and only when you ask.** The single clipboard call is a `writeText` in the *Copy code reference for selected lines* command, which puts a string like `[](#seal:11-14)` on the clipboard. The plugin never reads the clipboard and never handles paste events, so nothing you copied elsewhere is seen. To keep the plugin away from the system clipboard entirely, turn off **Copy to system clipboard** in its settings; the copy command then keeps the reference inside the plugin and *Paste reference* inserts it.
 - **Network: none.** `view source ↗` links are ordinary links that open in your browser when you click them.
-- **Files:** it only edits the note you are in, and only when you run a command (adding `id="..."` to a fence, or
-  inserting a reference). Settings are stored in the plugin's own `data.json`.
+- **Files:** it only edits the note you are in, and only when you run a command (adding `id="..."` to a fence, or inserting a reference). Settings are stored in the plugin's own `data.json`.
 
 ### Verifying a release
 
-Every release asset carries a GitHub
-[build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds),
-which proves it was built from this repository by the release workflow. With the GitHub CLI:
+Every release asset carries a GitHub [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds), which proves it was built from this repository by the release workflow. With the GitHub CLI:
 
 ```sh
 gh attestation verify main.js -R BlueBeard63/obsidian-code-references
@@ -89,10 +68,7 @@ gh attestation verify styles.css -R BlueBeard63/obsidian-code-references
 
 ## Publishing a site from the same notes
 
-The syntax is designed to survive publishing. [jack-morrison.dev](https://jack-morrison.dev) is built from an
-Obsidian vault with a small Go static site generator that renders the same code blocks and references (double
-underline, hover and click highlighting, shareable `#id:11-14` URLs). Any generator can support it: parse the
-fence attributes, give each line an element, and turn `#id:a-b` links into references.
+The syntax is designed to survive publishing. [jack-morrison.dev](https://jack-morrison.dev) is built from an Obsidian vault with a small Go static site generator that renders the same code blocks and references (double underline, hover and click highlighting, shareable `#id:11-14` URLs). Any generator can support it: parse the fence attributes, give each line an element, and turn `#id:a-b` links into references.
 
 ## Development
 
@@ -101,13 +77,13 @@ npm install
 npm test        # unit tests for the parser (node --test)
 npm run build   # type-check and bundle main.js into the repo root
 npm run dev     # watch mode
+npm run demo    # demo mode
 
 # build straight into a test vault while you work:
 OBSIDIAN_VAULT="/path/to/vault" npm run dev
 ```
 
-The parser (`src/parse.ts`) has no Obsidian or DOM imports and carries all the syntax rules; `reading.ts` handles
-reading view, `live.ts` the editor (CodeMirror 6), `commands.ts` the commands.
+The parser (`src/parse.ts`) has no Obsidian or DOM imports and carries all the syntax rules; `reading.ts` handles reading view, `live.ts` the editor (CodeMirror 6), `commands.ts` the commands.
 
 ### Releasing
 

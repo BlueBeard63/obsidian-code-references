@@ -2,3 +2,8 @@ node_modules/
 main.js
 *.zip
 data.json
+# demo vault: keep the note and its settings, not Obsidian's workspace or the built plugin
+demo/.obsidian/*
+!demo/.obsidian/app.json
+!demo/.obsidian/appearance.json
+!demo/.obsidian/community-plugins.json

@@ -8,7 +8,8 @@ import { fileURLToPath } from "node:url";
 //   OBSIDIAN_VAULT="D:/path/to/vault" npm run dev
 const here = dirname(fileURLToPath(import.meta.url));
 const production = process.argv[2] === "production";
-const vault = process.env.OBSIDIAN_VAULT;
+// `npm run demo` installs into the demo/ vault (screenshots, trying it out).
+const vault = process.env.OBSIDIAN_VAULT ?? (process.argv.includes("demo") ? resolve(here, "demo") : undefined);
 
 const installIntoVault = {
   name: "install-into-vault",
