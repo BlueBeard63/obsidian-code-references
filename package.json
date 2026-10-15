@@ -1,0 +1,28 @@
+{
+  "name": "obsidian-code-references",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Obsidian plugin: link prose to lines of a code block, with hover highlight and click-to-jump.",
+  "type": "module",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && node esbuild.config.mjs production",
+    "test": "node --test test/parse.test.ts",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "devDependencies": {
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.13",
+    "@types/node": "^25.9.0",
+    "esbuild": "^0.28.2",
+    "obsidian": "^1.14.4",
+    "typescript": "~5.9.3"
+  },
+  "license": "MIT",
+  "author": "Jack Morrison",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlueBeard63/obsidian-code-references.git"
+  }
+}

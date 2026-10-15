@@ -1,0 +1,187 @@
+/* Code References: line references and code block headers. Uses theme variables where it can, so
+   it follows light and dark themes. Underline styles: double = code reference, dotted = broken. */
+
+body {
+  --coderef-soft: rgba(237, 234, 228, 0.06);
+  --coderef-strong: rgba(237, 234, 228, 0.13);
+  --coderef-rule: #edeae4;
+  --coderef-fade: 450ms;
+}
+
+@supports (color: color-mix(in srgb, red 50%, transparent)) {
+  body {
+    --coderef-soft: color-mix(in srgb, var(--text-normal) 6%, transparent);
+    --coderef-strong: color-mix(in srgb, var(--text-normal) 13%, transparent);
+    --coderef-rule: var(--text-normal);
+  }
+}
+
+/* --- Code block header (reading view) -------------------------------------------------------- */
+
+.coderef-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  margin-top: 1em;
+  padding: 6px var(--size-4-4, 16px);
+  font-family: var(--font-monospace);
+  font-size: 0.78em;
+  color: var(--text-muted);
+  background: var(--code-background);
+  border-bottom: 1px solid var(--background-modifier-border);
+  border-radius: var(--code-radius, 4px) var(--code-radius, 4px) 0 0;
+}
+
+.coderef-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coderef-source {
+  flex: none;
+  color: var(--text-faint);
+  text-decoration: none;
+  background-image: none;
+  padding-right: 0;
+}
+
+a.coderef-source:hover {
+  color: var(--text-normal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.coderef-header + pre.coderef-pre {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* --- Lines ----------------------------------------------------------------------------------- */
+
+pre.coderef-pre {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+pre.coderef-pre > code {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.coderef-line {
+  display: block;
+  padding: 0 var(--size-4-4, 16px);
+  /* Fill via inset shadow so it sits over the code background and can fade. */
+  box-shadow: inset 0 0 0 0 transparent, inset 0 0 0 100vmax transparent;
+  transition: box-shadow var(--coderef-fade) ease-out;
+}
+
+.coderef-line:empty::after {
+  content: " ";
+}
+
+.coderef-line::before {
+  content: attr(data-line);
+  display: inline-block;
+  width: var(--coderef-gutter, 2ch);
+  margin-right: 2ch;
+  text-align: right;
+  color: var(--text-faint);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body.coderefs-hide-line-numbers .coderef-line::before {
+  display: none;
+}
+
+.coderef-line.is-soft,
+.cm-line.coderef-line-soft {
+  box-shadow: inset 0 0 0 0 transparent, inset 0 0 0 100vmax var(--coderef-soft);
+}
+
+.coderef-line.is-strong,
+.cm-line.coderef-line-strong {
+  box-shadow: inset 2px 0 0 0 var(--coderef-rule), inset 0 0 0 100vmax var(--coderef-strong);
+  transition: none;
+}
+
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  transition: box-shadow var(--coderef-fade) ease-out;
+}
+
+/* --- References ------------------------------------------------------------------------------ */
+
+.coderef {
+  cursor: pointer;
+  color: var(--text-normal);
+  border-radius: 2px;
+}
+
+.coderef-text,
+.coderef-lp,
+.coderef-lp * {
+  color: var(--text-normal) !important;
+  text-decoration-line: underline !important;
+  text-decoration-style: double !important;
+  text-decoration-thickness: 1px !important;
+  text-decoration-color: currentColor !important;
+  text-underline-offset: 3px;
+}
+
+.coderef-label {
+  margin-left: 0.35em;
+  font-family: var(--font-monospace);
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: normal;
+  color: var(--text-faint);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.coderef-lp-label {
+  cursor: pointer;
+}
+
+.coderef:hover .coderef-label,
+.coderef:focus-visible .coderef-label {
+  color: var(--text-muted);
+}
+
+.coderef:focus-visible {
+  outline: 1px solid var(--text-muted);
+  outline-offset: 2px;
+}
+
+.coderef.is-broken {
+  cursor: help;
+}
+
+.coderef.is-broken .coderef-text,
+.coderef-lp.is-broken,
+.coderef-lp.is-broken * {
+  text-decoration-style: dotted !important;
+  text-decoration-color: var(--text-muted) !important;
+}
+
+/* --- Modals ---------------------------------------------------------------------------------- */
+
+.coderef-suggest-meta {
+  display: block;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+
+.coderef-prompt-error {
+  min-height: 1.4em;
+  color: var(--text-error);
+  font-size: var(--font-ui-small);
+}
+
+.coderef-problems li {
+  margin-bottom: 0.4em;
+}
