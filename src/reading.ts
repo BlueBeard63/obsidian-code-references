@@ -61,7 +61,8 @@ function run(
   info: MarkdownSectionInformation | null,
 ): void {
   const blocks = findCodeBlocks(text);
-  const isPrivate = ctx.frontmatter?.private === true;
+  const frontmatter = ctx.frontmatter as { private?: unknown } | undefined;
+  const isPrivate = frontmatter?.private === true;
   if (codes.length) decorateBlocks(codes, blocks, info, ctx.sourcePath, isPrivate);
   if (links.length) {
     const byId = blocksById(blocks);
@@ -142,7 +143,7 @@ function decorateBlock(code: HTMLElement, block: CodeBlock, sourcePath: string, 
 function wrapLines(code: HTMLElement, expected: number): void {
   const lines = splitNode(code);
   // A trailing newline produces an extra empty line; drop empties beyond the block's length.
-  while (lines.length > Math.max(expected, 1) && lines[lines.length - 1]!.length === 0) lines.pop();
+  while (lines.length > Math.max(expected, 1) && lines[lines.length - 1].length === 0) lines.pop();
   code.empty();
   lines.forEach((nodes, i) => {
     const line = code.createSpan({ cls: LINE_CLASS });
@@ -156,12 +157,12 @@ function splitNode(node: Node): Node[][] {
   if (node.nodeType === Node.TEXT_NODE) {
     return (node.textContent ?? "").split("\n").map((part) => (part ? [document.createTextNode(part)] : []));
   }
-  if (!(node instanceof HTMLElement)) return [[]];
+  if (!node.instanceOf(HTMLElement)) return [[]];
   const lines: Node[][] = [[]];
   for (const child of Array.from(node.childNodes)) {
     const parts = splitNode(child);
-    lines[lines.length - 1]!.push(...parts[0]!);
-    for (let i = 1; i < parts.length; i++) lines.push(parts[i]!);
+    lines[lines.length - 1].push(...parts[0]);
+    for (let i = 1; i < parts.length; i++) lines.push(parts[i]);
   }
   if (node.tagName === "CODE") return lines;
   return lines.map((nodes) => {
@@ -176,7 +177,7 @@ function splitNode(node: Node): Node[][] {
 function watchForRehighlight(code: HTMLElement, expected: number): void {
   const observer = new MutationObserver(() => {
     const stale = Array.from(code.childNodes).some(
-      (n) => !(n instanceof HTMLElement) || !n.hasClass(LINE_CLASS),
+      (n) => !n.instanceOf(HTMLElement) || !n.hasClass(LINE_CLASS),
     );
     if (!stale) return;
     observer.disconnect();

@@ -9,7 +9,7 @@ const HIDE_NUMBERS_CLASS = "coderefs-hide-line-numbers";
 
 export default class CodeRefsPlugin extends Plugin {
   override settings: CodeRefsSettings = { ...DEFAULT_SETTINGS };
-  /** The last reference made by "Copy code reference", for "Paste code reference" (never saved). */
+  /** The last reference made by "Copy reference", for "Paste reference" (never saved). */
   lastReference: { id: string; start: number; end: number } | null = null;
   /** Mutated in place so the Live Preview toggle applies without a reload. */
   private readonly editorExtensions: Extension[] = [];

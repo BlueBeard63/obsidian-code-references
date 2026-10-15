@@ -74,7 +74,7 @@ export function parseFenceInfo(info: string): FenceInfo {
   }
   const attrs: Record<string, string> = {};
   for (const m of rest.matchAll(ATTR_RE)) {
-    const key = m[1]!;
+    const key = m[1];
     if (!(key in attrs)) attrs[key] = m[2] ?? m[3] ?? m[4] ?? "";
   }
   return { lang, attrs };
@@ -95,7 +95,7 @@ export function parseRefTarget(href: string | null | undefined): RefTarget | nul
   if (!m) return null;
   const start = Number(m[2]);
   const end = m[3] === undefined ? start : Number(m[3]);
-  return { id: m[1]!, start, end };
+  return { id: m[1], start, end };
 }
 
 /** "L7" or "L11-14" (plain hyphen). */
@@ -126,7 +126,7 @@ export function parseSource(source: string | undefined): SourceRef | null {
   if (!source) return null;
   const m = /^([^/\s@]+)\/([^/\s@]+)@([^:\s]+):(.+)$/.exec(source.trim());
   if (!m) return null;
-  return { owner: m[1]!, repo: m[2]!, ref: m[3]!, path: m[4]!.replace(/^\/+/, "") };
+  return { owner: m[1], repo: m[2], ref: m[3], path: m[4].replace(/^\/+/, "") };
 }
 
 /** https://github.com/owner/repo/blob/ref/path, optionally with #L7 or #L11-L14. */
@@ -151,15 +151,15 @@ export function findCodeBlocks(textOrLines: string | readonly string[]): CodeBlo
   const blocks: CodeBlock[] = [];
   let i = 0;
   while (i < lines.length) {
-    const raw = lines[i]!;
+    const raw = lines[i];
     const prefix = QUOTE_PREFIX_RE.exec(raw)![0];
     const m = FENCE_OPEN_RE.exec(raw.slice(prefix.length));
     if (!m) {
       i++;
       continue;
     }
-    const fence = m[2]!;
-    const info = m[3]!;
+    const fence = m[2];
+    const info = m[3];
     if (fence[0] === "`" && info.includes("`")) {
       i++;
       continue;
@@ -170,7 +170,7 @@ export function findCodeBlocks(textOrLines: string | readonly string[]): CodeBlo
     let j = i + 1;
     let closed = false;
     for (; j < lines.length; j++) {
-      const line = lines[j]!;
+      const line = lines[j];
       const p = QUOTE_PREFIX_RE.exec(line)![0];
       const body = depth > 0 ? stripQuoteLevels(line, depth) : line;
       if (depth > 0 && (p.match(/>/g) ?? []).length < depth) break; // quote ended: unclosed
@@ -248,15 +248,15 @@ export function findRefsInLine(text: string, line = 0): RefOccurrence[] {
     const start = Number(m[3]);
     const end = m[4] === undefined ? start : Number(m[4]);
     out.push({
-      id: m[2]!,
+      id: m[2],
       start,
       end,
-      label: m[1]!,
+      label: m[1],
       line,
       from,
       to: from + m[0].length,
       labelFrom: from + 1,
-      labelTo: from + 1 + m[1]!.length,
+      labelTo: from + 1 + m[1].length,
     });
   }
   return out;

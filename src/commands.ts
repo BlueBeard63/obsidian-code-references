@@ -18,14 +18,14 @@ import {
 
 export function registerCommands(plugin: CodeRefsPlugin): void {
   plugin.addCommand({
-    id: "copy-code-reference",
-    name: "Copy code reference for selected lines",
+    id: "copy-reference",
+    name: "Copy reference for selected lines",
     editorCallback: (editor) => copyReference(plugin, editor),
   });
 
   plugin.addCommand({
-    id: "paste-code-reference",
-    name: "Paste code reference",
+    id: "paste-reference",
+    name: "Paste reference",
     editorCheckCallback: (checking, editor) => {
       const ref = plugin.lastReference;
       if (!ref) return false;
@@ -35,14 +35,14 @@ export function registerCommands(plugin: CodeRefsPlugin): void {
   });
 
   plugin.addCommand({
-    id: "insert-code-reference",
-    name: "Insert code reference...",
+    id: "insert-reference",
+    name: "Insert reference...",
     editorCallback: (editor) => insertReference(plugin.app, editor),
   });
 
   plugin.addCommand({
-    id: "validate-code-references",
-    name: "Validate code references in current note",
+    id: "validate-references",
+    name: "Validate references in current note",
     checkCallback: (checking) => {
       const view = plugin.app.workspace.getActiveViewOfType(MarkdownView);
       if (!view) return false;
@@ -75,13 +75,13 @@ function copyReference(plugin: CodeRefsPlugin, editor: Editor): void {
     const ref = formatRef("", id, range.start, range.end);
     plugin.lastReference = { id, start: range.start, end: range.end };
     if (!plugin.settings.useClipboard) {
-      new Notice(`Ready: ${ref}. Run "Paste code reference" where you want it.`);
+      new Notice(`Ready: ${ref}. Run "Paste reference" where you want it.`);
       return;
     }
     // Write-only: the plugin never reads the clipboard.
     void navigator.clipboard.writeText(ref).then(
       () => new Notice(`Copied ${ref}`),
-      () => new Notice(`Could not copy to the clipboard: ${ref}. Use "Paste code reference" instead.`),
+      () => new Notice(`Could not copy to the clipboard: ${ref}. Use "Paste reference" instead.`),
     );
   };
   if (block.id) {

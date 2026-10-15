@@ -29,13 +29,13 @@ generator) a reference is just a link to `#seal`, so nothing breaks.
   link when the block has `source="owner/repo@ref:path"` (GitHub). Ctrl/Cmd-click a reference to open GitHub at
   exactly those lines.
 - **Broken reference warnings:** an unknown id or out-of-range lines show a dotted underline with a tooltip.
-- **Commands** (command palette, no default hotkeys):
-  - *Copy code reference for selected lines*: select lines inside a code block, run it, paste. If the block
+- **Commands** (command palette, listed under "Code References:", no default hotkeys):
+  - *Copy reference for selected lines*: select lines inside a code block, run it, paste. If the block
     has no id yet, it asks for one (with a suggestion) and adds it to the fence.
-  - *Paste code reference*: inserts the reference you last copied, without going through the clipboard.
+  - *Paste reference*: inserts the reference you last copied, without going through the clipboard.
     Selected text becomes the link label.
-  - *Insert code reference...*: pick a block from the note, then a line range.
-  - *Validate code references in current note*: lists every broken reference and duplicate id, click to jump.
+  - *Insert reference...*: pick a block from the note, then a line range.
+  - *Validate references in current note*: lists every broken reference and duplicate id, click to jump.
 - **Settings:** highlight duration, Live Preview decorations on/off, line numbers in reading view, copy to the
   system clipboard on/off.
 - Follows your theme (light and dark); no colours of its own beyond a soft highlight.
@@ -71,7 +71,7 @@ and enter `BlueBeard63/obsidian-code-references`.
   reference for selected lines* command, which puts a string like `[](#seal:11-14)` on the clipboard. The plugin
   never reads the clipboard and never handles paste events, so nothing you copied elsewhere is seen. To keep the
   plugin away from the system clipboard entirely, turn off **Copy to system clipboard** in its settings; the copy
-  command then keeps the reference inside the plugin and *Paste code reference* inserts it.
+  command then keeps the reference inside the plugin and *Paste reference* inserts it.
 - **Network: none.** `view source ↗` links are ordinary links that open in your browser when you click them.
 - **Files:** it only edits the note you are in, and only when you run a command (adding `id="..."` to a fence, or
   inserting a reference). Settings are stored in the plugin's own `data.json`.
