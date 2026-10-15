@@ -8,12 +8,18 @@ export interface CodeRefsSettings {
   livePreview: boolean;
   /** Show line numbers on id'd code blocks in reading view. */
   lineNumbers: boolean;
+  /**
+   * "Copy code reference" also writes to the system clipboard. The plugin never reads the clipboard;
+   * with this off the reference is only kept inside the plugin for "Paste code reference".
+   */
+  useClipboard: boolean;
 }
 
 export const DEFAULT_SETTINGS: CodeRefsSettings = {
   highlightMs: 2000,
   livePreview: true,
   lineNumbers: true,
+  useClipboard: true,
 };
 
 export class CodeRefsSettingTab extends PluginSettingTab {
@@ -59,6 +65,20 @@ export class CodeRefsSettingTab extends PluginSettingTab {
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.lineNumbers).onChange(async (value) => {
           this.plugin.settings.lineNumbers = value;
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("Copy to system clipboard")
+      .setDesc(
+        'When on, "Copy code reference for selected lines" puts the reference on the system clipboard. ' +
+          'When off, the plugin keeps it to itself and you insert it with "Paste code reference". ' +
+          "The plugin never reads the clipboard either way.",
+      )
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.useClipboard).onChange(async (value) => {
+          this.plugin.settings.useClipboard = value;
           await this.plugin.saveSettings();
         }),
       );

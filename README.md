@@ -32,9 +32,12 @@ generator) a reference is just a link to `#seal`, so nothing breaks.
 - **Commands** (command palette, no default hotkeys):
   - *Copy code reference for selected lines*: select lines inside a code block, run it, paste. If the block
     has no id yet, it asks for one (with a suggestion) and adds it to the fence.
+  - *Paste code reference*: inserts the reference you last copied, without going through the clipboard.
+    Selected text becomes the link label.
   - *Insert code reference...*: pick a block from the note, then a line range.
   - *Validate code references in current note*: lists every broken reference and duplicate id, click to jump.
-- **Settings:** highlight duration, Live Preview decorations on/off, line numbers in reading view.
+- **Settings:** highlight duration, Live Preview decorations on/off, line numbers in reading view, copy to the
+  system clipboard on/off.
 - Follows your theme (light and dark); no colours of its own beyond a soft highlight.
 
 ## Syntax
@@ -61,6 +64,28 @@ and enter `BlueBeard63/obsidian-code-references`.
 **Manually:** download `main.js`, `manifest.json` and `styles.css` from the
 [latest release](https://github.com/BlueBeard63/obsidian-code-references/releases/latest) into
 `<your vault>/.obsidian/plugins/code-references/`, then enable *Code References* under Community plugins.
+
+## Permissions and privacy
+
+- **Clipboard: write only, and only when you ask.** The single clipboard call is a `writeText` in the *Copy code
+  reference for selected lines* command, which puts a string like `[](#seal:11-14)` on the clipboard. The plugin
+  never reads the clipboard and never handles paste events, so nothing you copied elsewhere is seen. To keep the
+  plugin away from the system clipboard entirely, turn off **Copy to system clipboard** in its settings; the copy
+  command then keeps the reference inside the plugin and *Paste code reference* inserts it.
+- **Network: none.** `view source ↗` links are ordinary links that open in your browser when you click them.
+- **Files:** it only edits the note you are in, and only when you run a command (adding `id="..."` to a fence, or
+  inserting a reference). Settings are stored in the plugin's own `data.json`.
+
+### Verifying a release
+
+Every release asset carries a GitHub
+[build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds),
+which proves it was built from this repository by the release workflow. With the GitHub CLI:
+
+```sh
+gh attestation verify main.js -R BlueBeard63/obsidian-code-references
+gh attestation verify styles.css -R BlueBeard63/obsidian-code-references
+```
 
 ## Publishing a site from the same notes
 

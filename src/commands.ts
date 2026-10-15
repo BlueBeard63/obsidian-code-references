@@ -20,7 +20,18 @@ export function registerCommands(plugin: CodeRefsPlugin): void {
   plugin.addCommand({
     id: "copy-code-reference",
     name: "Copy code reference for selected lines",
-    editorCallback: (editor) => copyReference(plugin.app, editor),
+    editorCallback: (editor) => copyReference(plugin, editor),
+  });
+
+  plugin.addCommand({
+    id: "paste-code-reference",
+    name: "Paste code reference",
+    editorCheckCallback: (checking, editor) => {
+      const ref = plugin.lastReference;
+      if (!ref) return false;
+      if (!checking) pasteReference(editor, ref);
+      return true;
+    },
   });
 
   plugin.addCommand({
@@ -43,7 +54,8 @@ export function registerCommands(plugin: CodeRefsPlugin): void {
 
 // --- copy -------------------------------------------------------------------------------------
 
-function copyReference(app: App, editor: Editor): void {
+function copyReference(plugin: CodeRefsPlugin, editor: Editor): void {
+  const app = plugin.app;
   const from = editor.getCursor("from");
   const to = editor.getCursor("to");
   // A selection that ends at column 0 of the next line does not include that line.
@@ -61,9 +73,15 @@ function copyReference(app: App, editor: Editor): void {
   }
   const finish = (id: string) => {
     const ref = formatRef("", id, range.start, range.end);
+    plugin.lastReference = { id, start: range.start, end: range.end };
+    if (!plugin.settings.useClipboard) {
+      new Notice(`Ready: ${ref}. Run "Paste code reference" where you want it.`);
+      return;
+    }
+    // Write-only: the plugin never reads the clipboard.
     void navigator.clipboard.writeText(ref).then(
       () => new Notice(`Copied ${ref}`),
-      () => new Notice(`Could not copy to the clipboard: ${ref}`),
+      () => new Notice(`Could not copy to the clipboard: ${ref}. Use "Paste code reference" instead.`),
     );
   };
   if (block.id) {
@@ -99,6 +117,20 @@ function copyReference(app: App, editor: Editor): void {
       finish(id);
     },
   }).open();
+}
+
+// --- paste --------------------------------------------------------------------------------------
+
+/** Insert the last copied reference without touching the clipboard. A selection becomes the label. */
+function pasteReference(editor: Editor, ref: { id: string; start: number; end: number }): void {
+  const selected = editor.getSelection();
+  const label = selected || "ref";
+  const from = editor.getCursor("from");
+  editor.replaceSelection(formatRef(label, ref.id, ref.start, ref.end));
+  if (!selected) {
+    // Select the placeholder label so it can be typed over.
+    editor.setSelection({ line: from.line, ch: from.ch + 1 }, { line: from.line, ch: from.ch + 1 + label.length });
+  }
 }
 
 // --- insert -------------------------------------------------------------------------------------

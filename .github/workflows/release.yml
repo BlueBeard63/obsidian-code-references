@@ -7,7 +7,9 @@ on:
     tags: ["*"]
 
 permissions:
-  contents: write
+  contents: write      # create the release
+  id-token: write      # sign the attestation (Sigstore, via GitHub OIDC)
+  attestations: write  # store the attestation on the repo
 
 jobs:
   release:
@@ -22,6 +24,15 @@ jobs:
       - run: npm run build
       - name: Check the tag matches manifest.json
         run: test "$(node -p "require('./manifest.json').version")" = "${GITHUB_REF_NAME}"
+      # Build provenance: proves each asset was built from this repo, at this tag, by this workflow.
+      # Check a download with: gh attestation verify main.js -R BlueBeard63/obsidian-code-references
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            main.js
+            manifest.json
+            styles.css
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
